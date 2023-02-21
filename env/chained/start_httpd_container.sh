@@ -6,5 +6,8 @@
 # Copy the "good" runc binary
 sudo cp ~/runc-copy /usr/bin/runc
 
+# Stop any running container with the same name
+sudo docker stop pwnme
+
 # Start the pwnme container
-sudo docker run --name pwnme --rm -dit httpd-rce
+sudo docker run --name pwnme --rm -p 3000:80 -dit httpd-rce
